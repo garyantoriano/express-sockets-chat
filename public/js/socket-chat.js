@@ -12,36 +12,43 @@ var user = {
 };
 
 socket.on('connect', function () {
+    console.log('Connected to the server');
+
     socket.emit('enterToChat', user, function (resp) {
-        console.log('Connected users', resp);
+        renderUsers(resp);
     });
+
 });
 
-// Hear
+// escuchar
 socket.on('disconnect', function () {
-    console.log('Server connection lost');
+
+    console.log('The server connection is lost');
+
 });
 
 
-// Send information
-// socket.emit('createMessage', {
-//     user: 'Gary',
-//     message: 'Hola Mundo'
-// }, function (resp) {
-//     console.log('server response: ', resp);
+// Enviar información
+// socket.emit('crearMensaje', {
+//     nombre: 'Gary',
+//     mensaje: 'Hola Mundo'
+// }, function(resp) {
+//     console.log('respuesta server: ', resp);
 // });
 
-// Receive information
+// Escuchar información
 socket.on('createMessage', function (message) {
-    console.log('Server:', message);
+    renderMessages(message, false);
+    scrollBottom();
 });
 
-// Watch user cahnges (when a user enter to the chat)
+// Escuchar cambios de usuarios
+// cuando un usuario entra o sale del chat
 socket.on('peopleList', function (people) {
-    console.log(people);
+    renderUsers(people);
 });
 
-// Private message
-socket.on('privateMessage', (message) => {
-    console.log('Private message: ', message);
+// Mensajes privados
+socket.on('privateMessage', function (message) {
+    console.log('Private Message: ', message);
 });
